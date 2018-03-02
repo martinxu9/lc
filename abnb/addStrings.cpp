@@ -1,4 +1,7 @@
 #include<iostream>
+#include<string>
+#include<vector>
+#include<list>
 
 using namespace std;
 
@@ -14,7 +17,7 @@ string addStrings(const string& num1, const string& num2) {
     list<char> buf;
     int i=num1.size()-1, j=num2.size()-1, carry = 0;
     while(j>=0) {
-        int tmp = num2[j--]+(i>=0)?num1[i--]:0+carry;
+        int tmp = (num2[j--]-'0')+((i>=0)?num1[i--]-'0':0)+carry;
         carry = tmp/10;
         buf.push_front((char)(tmp%10+'0'));
     }
