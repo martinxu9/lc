@@ -1,18 +1,25 @@
 #include<iostream>
+#include<sstream>
 #include<vector>
 #include<string>
 #include<cstdint>
 using namespace std;
 
-uint32_t ipToUint(const string& ip) {
+uint32_t ipToUint32(const string& ip) {
     istringstream istring(ip);
     uint32_t num = 0;
     string tmp;
-    while(istring.getline(tmp, '.')) {
-        num = ((num << 4) & (stoi(tmp)));
+    while(getline(istring, tmp, '.')) {
+        num = ((num << 8) | (stoi(tmp)));
     }
     cout<<"IP " << ip.c_str() << " -> " << num << endl;
     return num;
+}
+
+string uint32ToIP(uint32_t ip_value) {
+    string res = to_string((ip_value&0xFF000000)>>24) + "." + to_string((ip_value&0xFF0000)>>16) + "." + to_string((ip_value&0xFF00)>>8) + "." + to_string((ip_value&0xFF));
+    cout<<"uint32_t " << ip_value << " -> " << res.c_str() << endl;
+    return res;
 }
 
 // range is [1,1000]
@@ -20,23 +27,32 @@ uint32_t ipToUint(const string& ip) {
 vector<string> ipToCIDR(string ip, int range) {
     vector<string> res;
     if(range==0) return res;
-    // see if this case below can be covered
-    if(range==1) {
-        res.push_back(ip+"/32");
-        return res;
-    }
     // basically, see the least significant 1 in the binary representation
     // how many in the range
     // e.g. x x x x x 1 0 0 0 should accommodate 8, ending 1000 to 1111
     // then we find the next set 10000 if we need this many
-    uint32_t i = 1;
-    int cnt = 0;
+    uint32_t ip_value = ipToUint32(ip);
 
+    while(range>0){
+        int cnt = 0;
+        uint32_t i = 1;
+        // how many needed, range
+        // how many a 1000000 format can accommodate
+        // how many zeros after the 1 in the starting IP
+        while((i&ip_value)==0 && i<=range && (i<<1)<=range){
+            i=i<<1;
+            cnt++;
+        }
+        res.push_back(uint32ToIP(ip_value)+"/"+to_string(32-cnt));
+        ip_value+=i;
+        range-=i;
+    }
     return res;
 }
 
 template<class T>
 void printVector(vector<T> data) {
+    if(data.empty()) cout<<"It is empty!";
     for(auto it=data.begin();it!=data.end();++it) {
         cout<<*it<<" ";
     }
