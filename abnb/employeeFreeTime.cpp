@@ -1,5 +1,6 @@
 #include<iostream>
 #include<vector>
+#include<queue>
 
 using namespace std;
 
@@ -13,9 +14,53 @@ struct Interval{
     }
 };
 
+struct QueueNode {
+    int i; //which employee
+    int j; //which interval
+    Interval slot;
+    QueueNode(const int i1, const int j1, const Interval& s1): i(i1), j(j1), slot(s1) {}
+};
+
+class NodeComparison{
+public:
+    bool operator()(const QueueNode& a, const QueueNode& b) {
+        return a.slot.start>b.slot.start;
+    }
+};
+
 vector<Interval> employeeFreeTime(vector<vector<Interval>>& avails){
     vector<Interval> res;
     // this is similar to merge intervals?
+    if(avails.empty()) return res;
+    priority_queue<QueueNode, vector<QueueNode>, NodeComparison> queue;
+    int i;
+    for(i=0;i<(int)avails.size();++i) {
+        if(avails[i].empty()) continue;
+        queue.push(QueueNode(i, 0, avails[i][0]));
+    }
+    // merging all the intervals
+    // when a new Interval popped from the priority queue
+    // it should have an equal or later start time
+    // see if can be merged with previous ones
+    // if cannot be merged, we have the free time
+    Interval *last = NULL;
+    while(!queue.empty()) {
+        QueueNode tmp = queue.top();
+        queue.pop();
+        if(tmp.j<(int)avails[tmp.i].size()-1) queue.push(QueueNode(tmp.i, tmp.j+1, avails[tmp.i][tmp.j+1]));
+
+        if(!last) {
+            last = new Interval(tmp.slot);
+        } else {
+            if(tmp.slot.start<=last->end) {
+                last->end = max(last->end, tmp.slot.end);
+            } else {
+                res.emplace_back(Interval(last->end, tmp.slot.start));
+                last->start = tmp.slot.start;
+                last->end = tmp.slot.end;
+            }
+        }
+     }
     return res;
 }
 
