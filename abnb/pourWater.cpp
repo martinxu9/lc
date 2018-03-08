@@ -17,7 +17,7 @@ vector<int> pourWater(vector<int>& heights, int V, int K) {
         if(!(j<K && heights[j]<heights[K])) {
             // try go right
             i = K;
-            while(i<heights.size()-1&&heights[i]>=heights[i+1]){
+            while(i<(int)heights.size()-1&&heights[i]>=heights[i+1]){
                 if(heights[i]>heights[i+1]) j=i+1;
                 ++i;
             }
@@ -36,9 +36,9 @@ struct Data{
 
 template<class T>
 void printVector(vector<T> data) {
-    for(int i=0;i<data.size();++i) {
+    for(int i=0;i<(int)data.size();++i) {
         cout<<data[i];
-        if(i<data.size()-1) cout<<" ";
+        if(i<(int)data.size()-1) cout<<" ";
     }
     cout<<endl;
 }
@@ -63,7 +63,7 @@ int main(){
     d.heights = {2};
     tests.emplace_back(d);
 
-    for(int i=0;i<tests.size();++i) {
+    for(int i=0;i<(int)tests.size();++i) {
         cout<<"V="<<tests[i].V<<", K="<<tests[i].K<<endl;
         cout<<"heights:"<<endl;
         printVector<int>(tests[i].heights);
