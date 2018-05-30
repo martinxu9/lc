@@ -63,7 +63,8 @@ vector<string> mostFreq(const string& data, const vector<string>& excl) {
 }
 
 int main() {
-  vector<pair<string, vector<string>>> tests = {{"Jimmy has an apple, it is on the table ", {"an", "a", "is", "the"}}};
+  vector<pair<string, vector<string>>> tests = {{"Jimmy has an apple, it is on the table ", {"an", "a", "is", "the"}},
+                                                {"jack and jill went to the market to buy bread and cheese cheese is jack favourite food", {"and", "he", "the", "to", "is"}}};
   for(int i=0;i<tests.size();++i) {
     cout<<"The sentence is :"<<endl;
     cout<<tests[i].first.c_str()<<endl;
