@@ -27,7 +27,7 @@ int compareCaseInsensitive(const string& a, const string& b) {
     }
     if(i==a.size()&&j==b.size()) return 0; // equal
     else
-        return (j<b.size())*2-1; // 1 -> a is in front of b
+        return (i<a.size())*2-1; // 1 -> a is in front of b
 }
 
 struct LineMetadata {
@@ -100,17 +100,25 @@ vector<string> sortLog(vector<string>& logLines, int logFileSize) {
 }
 
 int main() {
-    vector<pair<vector<string>, int>> tests = {{{"a1 9 2 3 1", "g1 Act car", "zo4 4 7", "b9 act zoo", "ab1 off KEY dog", "a8 act zoo"}, 6}};
+    vector<pair<vector<string>, int>> tests = {{{"a1 9 2 3 1", "g1 Act car", "zo4 4 7", "b9 act zoo", "ab1 off KEY dog", "a8 act zoo"}, 6},
+    {{"min jog mid pet", "wz3 34 54 398", "a1 alps cow bar", "x4 45 21 7"}, 4},
+    {{"t2 13 121 98", "r1 box ape bit", "b4 xi me nu", "br8 eat nim did", "w1 has uni gry", "f3 52 54 31"}, 6},
+    {{"a1 9 2 3 1", "g1 Act car","g0 Act car", "g1 Act car more", "1g Act car more", "zo4 4 7", "ab1 off KEY dog",
+        "a8 act zoo"}, 8},
+    {{"fhie bdf8 sfds", "fdsf adef sees", "fdse adef sees", "efe2 12345 5555", "asd1 12355 5555", "123 act car", "124 a c t c a r"}, 7}};
     for(int i=0;i<tests.size();++i) {
-        cout<<"the log has "<<tests[i].second<< " lines:"<<endl;
+        cout<<"## the log has "<<tests[i].second<< " lines:"<<endl;
         for(int j=0;j<tests[i].second;++j) {
             cout<<tests[i].first[j].c_str()<<endl;
         }
-        cout<<"the sorted log is :"<<endl;
+        cout<<endl;
+        cout<<"## the sorted log is :"<<endl;
         vector<string> res = sortLog(tests[i].first, tests[i].second);
         for(int j=0;j<res.size();++j) {
             cout<<res[j].c_str()<<endl;
         }
+        cout<<endl;
+        cout<<endl;
     }
     return 0;
 }

@@ -22,14 +22,16 @@ vector<string> splitData(const string& data) {
   if(data.empty()) return res;
   int i=0, j=0;
   while(j<data.size()) {
+    string tmp = "";
     while(i<data.size()&&(!isalpha(data[i]))) {
       ++i;
     }
     j=i;
     while(j<data.size()&&isalpha(data[j])) {
+      tmp.push_back(tolower(data[j]));
       ++j;
     }
-    if(j>=i&&i<data.size()) res.emplace_back(data.substr(i, j-i));
+    if(j>=i&&i<data.size()) res.emplace_back(tmp);
     i=j;
   }
   return res;
@@ -64,14 +66,17 @@ vector<string> mostFreq(const string& data, const vector<string>& excl) {
 
 int main() {
   vector<pair<string, vector<string>>> tests = {{"Jimmy has an apple, it is on the table ", {"an", "a", "is", "the"}},
-                                                {"jack and jill went to the market to buy bread and cheese cheese is jack favourite food", {"and", "he", "the", "to", "is"}}};
+                                                {"jack and jill went to the market to buy bread and cheese cheese is jack favourite food", {"and", "he", "the", "to", "is"}},
+                                                {"Rose is a flower red rose are flower", {"is", "are", "a"}},
+                                                {"Jack and Jill went to the market to buy bread and cheese. Cheese is Jack's and Jill's favorite food.", {"and","he", "the", "to", "is"}}};
   for(int i=0;i<tests.size();++i) {
-    cout<<"The sentence is :"<<endl;
+    cout<<"## The sentence is :"<<endl;
     cout<<tests[i].first.c_str()<<endl;
-    cout<<"not including the following:"<<endl;
+    cout<<"## not including the following:"<<endl;
     printVector<string>(tests[i].second, " ");
-    cout<<"most frequest words in sentence:"<<endl;
+    cout<<"## most frequest words in sentence:"<<endl;
     printVector<string>(mostFreq(tests[i].first, tests[i].second), " ");
+    cout<<endl;
   }
   return 0;
 }
