@@ -48,33 +48,24 @@ public:
             return next_seat;
         }
 
-        set<int>::reverse_iterator it;
         // j: tracks previous iterated larger of the pair
-        int j, dist = -1;  // i: tracks the selected smaller of the pair
+        int prev = -1, dist = (*seated.begin() - 0); // consider left end seat
 
-        for (it = seated.rbegin(); it != seated.rend(); ++it) {
-            if (it == seated.rbegin()) {
-                j = *it;
+        for (auto it = seated.begin(); it != seated.end(); ++it) {
+            if (it == seated.begin()) {
+                prev = *it;
                 continue;
             }
-            int tmp = (j - (*it) - 1);
-            if (tmp > 0 && (tmp - 1 )/2 >= dist) {
-                dist = ((tmp - 1)/2);
-                next_seat = (*it) + dist + 1;
+            int tmp = ((*it) - prev)/2;
+            if (tmp > dist) {
+                dist = tmp;
+                next_seat = prev + dist;
             }
-            j = *it;
+            prev = *it;
         }
         // checks the right end of the row if it's not already taken
-        it = seated.rbegin();
-        j = N - 1;
-        if (j - *it - 1 > dist) { // note > not >= because we want the smaller seat number
-            next_seat = j;
-            dist = (j - (*it) -1);
-        }
-        // checks the left end of the row if it's not already taken
-        j = (*seated.begin());
-        if (j > 0 && (j - 1) >= dist) {
-            next_seat = 0;
+        if ( (N - 1) - prev > dist) { // note > not >= because we want the smaller seat number
+            next_seat = N - 1;
         }
 
         seated.insert(next_seat);
