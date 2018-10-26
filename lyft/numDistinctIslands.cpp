@@ -83,8 +83,12 @@ private:
         }
 
         // ENCODING method #2:
-        // TODO
-
+        // but this doesn't work with BFS
+        // It works with DFS by adding boundaries
+        // for example a traversal starting with 'o' and ends with 'b'
+        // that way we can distinguish if a certain direction is from the starting
+        // point or from its subsequent quests
+        
         // for debugging
 
         /* for encoding method #1
